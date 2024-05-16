@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import React from "react";
 import raw from "./words.txt"
@@ -20,7 +19,7 @@ class App extends React.Component {
       let word = words[Math.floor(Math.random() * words.length)].split("@");
       let cur_word = ""
       for (let i = 0; i < word[0].length; i++) {
-        if (word[0][i] != " ") {
+        if (word[0][i] !== " ") {
           cur_word += ".";
         } else {
           cur_word += " "
@@ -37,7 +36,7 @@ class App extends React.Component {
       let word = words[Math.floor(Math.random() * words.length)].split("@");
       let cur_word = ""
       for (let i = 0; i < word[0].length; i++) {
-        if (word[0][i] != " ") {
+        if (word[0][i] !== " ") {
           cur_word += ".";
         } else {
           cur_word += " "
@@ -75,21 +74,21 @@ class App extends React.Component {
         }
         
         this.setState({cur_word: cur, cur_input: ""})
-        if (cur == this.state.full_word) {
+        if (cur === this.state.full_word) {
           alert("Легчайшая!")
         }
         if (found === 0) {
           let mistakes = this.state.mistakes;
           mistakes++;
           this.setState({mistakes: mistakes});
-          if (mistakes == 3) {
+          if (mistakes === 3) {
             alert(`Анлак( Правильное слово: ${this.state.full_word}`);
             fetch(raw).then((res) => res.text()).then((text) => {
               let words = text.split("\n");
               let word = words[Math.floor(Math.random() * words.length)].split("@");
               let cur_word = ""
               for (let i = 0; i < word[0].length; i++) {
-                if (word[0][i] != " ") {
+                if (word[0][i] !== " ") {
                   cur_word += ".";
                 } else {
                   cur_word += " "
