@@ -14,6 +14,7 @@ class App extends React.Component {
       tip: "",
       cur_input: ""
     }
+    this.ref = React.createRef();
     fetch(raw).then((res) => res.text()).then((text) => {
       let words = text.split("\n");
       let word = words[Math.floor(Math.random() * words.length)].split("@");
@@ -29,6 +30,13 @@ class App extends React.Component {
     })
     this.onBtnClick = this.onBtnClick.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
+    this.onReload = this.onReload.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+  }
+  handleKeyPress = (event) => {
+    if(event.key === 'Enter'){
+      this.onBtnClick(event);
+    }
   }
   onReload = (e) => {
     fetch(raw).then((res) => res.text()).then((text) => {
@@ -44,6 +52,7 @@ class App extends React.Component {
       }
       this.setState({cur_word: cur_word, full_word: word[0], tip: word[1], mistakes: 0, guessed: [], inputed: [], cur_input: ""})
     })
+    this.ref.current.focus();
   }
   onInputChange = (e) => {
     this.setState({cur_input: e.target.value.toLowerCase()})
@@ -53,6 +62,7 @@ class App extends React.Component {
       alert("Надо ввести букву")
     } else {
       if (this.state.inputed.includes(this.state.cur_input)) {
+        this.setState({cur_input: ""});
         alert("Вы уже вводили эту букву")
       } else {
         let inputed = this.state.inputed;
@@ -100,6 +110,7 @@ class App extends React.Component {
         }
       }
     }
+    this.ref.current.focus();
   }
   render() {
     return (
@@ -109,7 +120,7 @@ class App extends React.Component {
         </div>
         <h1 class="word">{this.state.cur_word}</h1>
         <div>
-          <input type="text" maxLength="1" placeholder="Буква" onChange={this.onInputChange} value={this.state.cur_input} />
+          <input onKeyPress={this.handleKeyPress} ref={this.ref} autoFocus type="text" maxLength="1" placeholder="Буква" onChange={this.onInputChange} value={this.state.cur_input} />
           <button onClick={this.onBtnClick}>Отправить букву</button>
         </div>
         <h3 style={{color: this.state.mistakes === 0 ? "#00ff00" : this.state.mistakes === 1 ? "#f68379" : "#FD0E35"}}>Ошибок подряд: {this.state.mistakes}</h3>
